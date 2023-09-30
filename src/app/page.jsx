@@ -1,5 +1,6 @@
 import TaskView from "@/components/home/TaskView";
 
+
 async function loadTasks() {
   const res = await fetch("http://localhost:3000/api/tasks");
   const data = await res.json();
@@ -7,6 +8,8 @@ async function loadTasks() {
 }
 
 async function HomePage() {
+
+  
   const tasks = await loadTasks();
   console.log(tasks);
 

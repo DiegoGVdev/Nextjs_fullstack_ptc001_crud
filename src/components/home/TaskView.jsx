@@ -9,8 +9,8 @@ function TaskView({ task }) {
     <div key={task.id} className="bg-slate-700 p-3  hover:bg-slate-800"
     onClick={() => router.push(`/tasks/edit/${task.id}`)}
     >
-      <h3 className="font-bold text-2xl mb-2">task.title</h3>
-      <p>task.description</p>
+      <h3 className="font-bold text-2xl mb-2">{task.title}</h3>
+      <p>{task.description}</p>
       <p>{new Date(task.createdAt).toLocaleDateString()}</p>
     </div>
   );
