@@ -1,9 +1,9 @@
 import TaskView from "@/components/home/TaskView";
+import {prisma} from '@/libs/prisma'
 
 
 async function loadTasks() {
-  const res = await fetch("http://localhost:3000/api/tasks");
-  const data = await res.json();
+  const data =  await prisma.task.findMany()
   return data;
 }
 

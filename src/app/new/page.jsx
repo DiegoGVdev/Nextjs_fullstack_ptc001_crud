@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { prisma } from "@/libs/prisma";
 
 function NewPage({ params }) {
   const router = useRouter();
@@ -23,16 +24,15 @@ function NewPage({ params }) {
     e.preventDefault();
 
     if (params.id) {
-     const res = await fetch(`/api/tasks/${params.id}`,{
-      method: "PUT",
-      body: JSON.stringify({title, description}),
-      headers: {
-        "Content-Type": "application/json",
-      },
-     })
-     const data = await res.json();
-     console.log(data)
-
+      const res = await fetch(`/api/tasks/${params.id}`, {
+        method: "PUT",
+        body: JSON.stringify({ title, description }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await res.json();
+      console.log(data);
     } else {
       const res = await fetch("/api/tasks", {
         method: "POST",
@@ -41,20 +41,30 @@ function NewPage({ params }) {
           "content-type": "application/json",
         },
       });
-      const data = await res.json( );
-      setTitle(data.title)
-      setDescription(data.description)
-      
+      const data = await res.json();
+      setTitle(data.title);
+      setDescription(data.description);
     }
-    
-    router.refresh( )
+
+    router.refresh();
     router.push("/");
-    
   };
+
+  const onHandleDelete = async () => {
+    const res = await fetch(`/api/tasks/${params.id}`, {
+      method: "DELETE",
+    });
+    const data = await res.json()
+
+    router.refresh()
+    router.push("/")
+  };
+
+
 
   return (
     <div className="h-screen flex justify-center items-center">
-      <form className="bg-slate-800 p-10 md:w-1/4" onSubmit={onSubmit}>
+      <form className="bg-slate-800 p-10 md:w-1/3" onSubmit={onSubmit}>
         <label htmlFor="title" className="font-bold text-sm">
           Titulo de la tarea
         </label>
@@ -81,12 +91,26 @@ function NewPage({ params }) {
           value={description}
         ></textarea>
 
-        <button
-          className="bg-blue-500 hover:bg-blue-700 text-white 
+        <div className="flex justify-between">
+          <button
+            type="submit"
+            className="bg-blue-500 hover:bg-blue-700 text-white 
       font-bold py-2 px-4 rounded "
-        >
-          Crear
-        </button>
+          >
+            Crear
+          </button>
+
+          {params.id && (
+            <button
+              type="button"
+              onClick={onHandleDelete }
+              className="bg-red-500 hover:bg-red-700 text-white 
+            font-bold py-2 px-4 rounded mx-2 "
+            >
+              Delete
+            </button>
+          )}
+        </div>
       </form>
     </div>
   );
